@@ -99,9 +99,9 @@ Let's use a for loop:
 
 ```{r}
 output = vector("list", length = 4)
-#above is empty 
+#above is empty MAKE IT FIRST
 
-for (i in 1:4){
+for (i in 1:4) {
 output[[i]] = mean_sd(list_norm[[i]])
 }
 #don't want to keep coyping over this line and change 1 to 2, 3, 4, etc. SO we use for loops
@@ -109,4 +109,23 @@ output[[i]] = mean_sd(list_norm[[i]])
 
 output
 ```
+
+## Let's try a map
+
+```{r}
+map(list_norm, mean_sd)
+# give it an input list and a fn i want to define. it gives the output a name
+
+output = map(list_norm, mean_sd)
+# output and map(sfsf) are the same thing.
+```
+
+What if you want a diff fn?
+
+```{r}
+output = map(list_norm, median)
+```
+
+
+
 
