@@ -184,8 +184,78 @@ listcol = listcol %>%
   medians = map_dbl(samp, median))
 ```
 
+## Weather Data
+
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors( 
+    c("USW00094728", "USC00519397", "USS0023B17S"), 
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+    mutate(
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>% 
+  select(name, id, everything())
+```
+
+Get our list columns..
+```{r}
+weather_nest = 
+  weather_df %>%
+  #nest: i want one df for cp, one for waikiki and one for waterhole
+  nest(data = date:tmin)
+```
+
+```{r}
+weather_nest %>% pull(name)
+weather_nest %>% pull(data)
+
+weather_nest$data[[1]]
+```
+
+Suppose U want to regress `tmax` and `tmin` for each station
 
 
+```{r}
+#THIS WORKS
+lm(tmax ~ tmin, data = weather_nest$data[[1]]) #"~" is against tmax against (~) tmin
+```
 
+A function to do this regression
+```{r}
+weather_lm = function(df) {
+  lm(tmax ~ tmin, data = df)
+}
+#weather_lm(weather_nest$data[[1]]) THIS FN CHECK WORKS
+# I want the linear regression for all the data frames (HI and WA) too, so make a for loop
 
+output = vector("list", 3)
+for (i in 1:3) {
+  output[[i]] = weather_lm(weather_nest$data[[i]])
+}
+```
+
+What about map??
+
+```{r}
+map(weather_nest$data, weather_lm) #for each of the data tibbles, i want to apply my weather_lm fn 
+
+```
+
+What about a map in a list column??
+
+```{r}
+weather_nest %>% 
+  mutate(models = map(data, weather_lm))
+# we created a new list of the linear models.
+
+#weather_nest$models #why does this not work??
+
+```
 
