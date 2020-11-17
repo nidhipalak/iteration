@@ -60,11 +60,12 @@ x_vec = rnorm(30, mean = 5, sd = 3)
 (x_vec - mean(x_vec)) / sd(x_vec)
 ```
 
-    ##  [1]  0.46711041 -0.28995509 -0.41611891  0.70404695  0.45988260 -0.63464035
-    ##  [7]  1.16509986 -1.01627804  0.05290674  0.14631020 -0.16486457 -2.22178428
-    ## [13]  1.51855675 -0.66453997  1.31168281 -0.08878938 -0.34213461  0.66802043
-    ## [19]  1.20236951  0.85993125  1.71082566 -0.88320151 -2.01940271  0.34521414
-    ## [25] -0.50090213  0.14810009 -0.02283791  0.43318377  0.17382446 -2.10161619
+    ##  [1]  0.112499872  0.454133610 -0.667437285 -1.304245435 -0.255887723
+    ##  [6]  0.035414417 -1.287214064  0.570694828 -0.009475162 -0.358077496
+    ## [11]  0.298618708 -0.006453437  0.492998488 -0.326360625  1.306112932
+    ## [16]  0.454509208  1.545022327  1.247631166 -0.320270049  0.347574264
+    ## [21] -1.022339181  1.295513835 -0.481923113  2.309781899 -1.192563566
+    ## [26]  0.562077401 -0.145723394 -2.209516728 -1.713057001  0.267961304
 
 ``` r
 #The above is the z-score
@@ -88,11 +89,12 @@ z_score = function(x) {
 z_score(x_vec)
 ```
 
-    ##  [1]  0.46711041 -0.28995509 -0.41611891  0.70404695  0.45988260 -0.63464035
-    ##  [7]  1.16509986 -1.01627804  0.05290674  0.14631020 -0.16486457 -2.22178428
-    ## [13]  1.51855675 -0.66453997  1.31168281 -0.08878938 -0.34213461  0.66802043
-    ## [19]  1.20236951  0.85993125  1.71082566 -0.88320151 -2.01940271  0.34521414
-    ## [25] -0.50090213  0.14810009 -0.02283791  0.43318377  0.17382446 -2.10161619
+    ##  [1]  0.112499872  0.454133610 -0.667437285 -1.304245435 -0.255887723
+    ##  [6]  0.035414417 -1.287214064  0.570694828 -0.009475162 -0.358077496
+    ## [11]  0.298618708 -0.006453437  0.492998488 -0.326360625  1.306112932
+    ## [16]  0.454509208  1.545022327  1.247631166 -0.320270049  0.347574264
+    ## [21] -1.022339181  1.295513835 -0.481923113  2.309781899 -1.192563566
+    ## [26]  0.562077401 -0.145723394 -2.209516728 -1.713057001  0.267961304
 
 Try my fn on some other things. These should giver errors
 
@@ -150,11 +152,12 @@ z_score = function(x) {
 z_score(x_vec)
 ```
 
-    ##  [1]  0.46711041 -0.28995509 -0.41611891  0.70404695  0.45988260 -0.63464035
-    ##  [7]  1.16509986 -1.01627804  0.05290674  0.14631020 -0.16486457 -2.22178428
-    ## [13]  1.51855675 -0.66453997  1.31168281 -0.08878938 -0.34213461  0.66802043
-    ## [19]  1.20236951  0.85993125  1.71082566 -0.88320151 -2.01940271  0.34521414
-    ## [25] -0.50090213  0.14810009 -0.02283791  0.43318377  0.17382446 -2.10161619
+    ##  [1]  0.112499872  0.454133610 -0.667437285 -1.304245435 -0.255887723
+    ##  [6]  0.035414417 -1.287214064  0.570694828 -0.009475162 -0.358077496
+    ## [11]  0.298618708 -0.006453437  0.492998488 -0.326360625  1.306112932
+    ## [16]  0.454509208  1.545022327  1.247631166 -0.320270049  0.347574264
+    ## [21] -1.022339181  1.295513835 -0.481923113  2.309781899 -1.192563566
+    ## [26]  0.562077401 -0.145723394 -2.209516728 -1.713057001  0.267961304
 
 Try fn again, should also give errors
 
@@ -217,7 +220,7 @@ mean_sd(x_vec)
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  3.34  4.43
+    ## 1  2.46  4.17
 
 Multiple inputs I’d like to do this with a fn
 
@@ -237,7 +240,7 @@ sim_data %>%
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  2.91  4.22
+    ## 1  2.82  3.51
 
 ``` r
 sim_mean_sd = function(samp_size, mu, sigma) {
@@ -260,7 +263,7 @@ sim_mean_sd(100, 6, 3)
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  6.35  3.01
+    ## 1  5.91  2.74
 
 ``` r
 # having sim_mean_sd(samp_size = 100, mu = 6, sigma = 3) are NAME MATCHING
@@ -288,4 +291,124 @@ sim_mean_sd(100, mu = 4, sigma = 2) # this overrides the original mu and sigma i
     ## # A tibble: 1 x 2
     ##    mean    sd
     ##   <dbl> <dbl>
-    ## 1  3.98  2.17
+    ## 1  3.97  2.05
+
+## Let’s review Napopleon Dynamite
+
+``` r
+napdyn_url = "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber=1"
+
+napoleon_html = read_html(napdyn_url)
+
+review_titles = napoleon_html %>% 
+  html_nodes(".a-text-bold span") %>% 
+  html_text()
+
+review_stars = napoleon_html %>% 
+  html_nodes("#cm_cr-review_list .review-rating") %>% 
+  html_text() %>% 
+  str_extract("^\\d") %>% #this takes out the first digit
+  as.numeric()
+
+review_text = napoleon_html %>% 
+  html_nodes(".review-text-content span") %>% 
+  html_text() %>% 
+  str_replace_all("\n", "") %>% #removes the \n at the beginning and end and replaces it with nothing
+  str_trim()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+```
+
+What about the next page of reviews? I can copy and paste the code and
+change url to next page to get tibble of the next one. Avoid this
+tediousness? Create a function\!\!\!
+
+``` r
+read_page_rev = function(url) {
+    html = read_html(url)
+
+review_titles = html %>% 
+  html_nodes(".a-text-bold span") %>% 
+  html_text()
+
+review_stars = html %>% 
+  html_nodes("#cm_cr-review_list .review-rating") %>% 
+  html_text() %>% 
+  str_extract("^\\d") %>% 
+  as.numeric()
+
+review_text = html %>% 
+  html_nodes(".review-text-content span") %>% 
+  html_text() %>% 
+  str_replace_all("\n", "") %>% 
+  str_trim()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+
+reviews
+}
+```
+
+Let’s try out my function
+
+``` r
+napdyn_url = "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber=1"
+
+read_page_rev(napdyn_url)
+```
+
+    ## # A tibble: 10 x 3
+    ##    title                           stars text                                   
+    ##    <chr>                           <dbl> <chr>                                  
+    ##  1 A special memory provided thro…     5 "I try to get my son to watch quality …
+    ##  2 The one, the only.                  5 "Some people will not like this film. …
+    ##  3 Classic                             5 "The first time I watched it, I was li…
+    ##  4 My experiences with Napoleon D…     5 "I live in Preston, Idaho and I am a n…
+    ##  5 Umm...                              1 "This was spectacularly stupid. Ended …
+    ##  6 A Classic                           5 "Stupid but brilliant. Hilarious but t…
+    ##  7 What's it like to be That Guy?      5 "All the schools I attended had somebo…
+    ##  8 The ultimate high school outca…     4 "Napoleon Dynamite was the ultimate ne…
+    ##  9 16 years later it’s still affe…     4 "A modern, off the wall, classic. See …
+    ## 10 silly.. always makes me laugh       5 "Freaking hilarious. It is one of thos…
+
+Let’s read a few pages of reviews
+
+With the function we can just change the url to every page and let it
+run the full fn
+
+``` r
+napdyn_url_base = "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber="
+
+#url base is the url up to the page number
+
+napdyn_urls = str_c(napdyn_url_base, 1:5)
+
+napdyn_urls[1] #gives first page
+```
+
+    ## [1] "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber=1"
+
+``` r
+napdyn_urls[3] #gives third page
+```
+
+    ## [1] "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber=3"
+
+``` r
+more_reviews = bind_rows(
+  read_page_rev(napdyn_urls[1]),
+  read_page_rev(napdyn_urls[2]),
+  read_page_rev(napdyn_urls[3]),
+  read_page_rev(napdyn_urls[4]),
+  read_page_rev(napdyn_urls[5])
+)
+#this part is still a little long lol. What if i wanted 30 pages?
+```

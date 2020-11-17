@@ -180,3 +180,99 @@ sim_data %>%
 sim_mean_sd(100, mu = 4, sigma = 2) # this overrides the original mu and sigma inputs in the function
 ```
 
+## Let's review Napopleon Dynamite
+
+```{r}
+napdyn_url = "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber=1"
+
+napoleon_html = read_html(napdyn_url)
+
+review_titles = napoleon_html %>% 
+  html_nodes(".a-text-bold span") %>% 
+  html_text()
+
+review_stars = napoleon_html %>% 
+  html_nodes("#cm_cr-review_list .review-rating") %>% 
+  html_text() %>% 
+  str_extract("^\\d") %>% #this takes out the first digit
+  as.numeric()
+
+review_text = napoleon_html %>% 
+  html_nodes(".review-text-content span") %>% 
+  html_text() %>% 
+  str_replace_all("\n", "") %>% #removes the \n at the beginning and end and replaces it with nothing
+  str_trim()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+```
+
+What about the next page of reviews?
+I can copy and paste the code and change url to next page to get tibble of the next one.  Avoid this tediousness? Create a function!!!
+
+```{r}
+
+read_page_rev = function(url) {
+    html = read_html(url)
+
+review_titles = html %>% 
+  html_nodes(".a-text-bold span") %>% 
+  html_text()
+
+review_stars = html %>% 
+  html_nodes("#cm_cr-review_list .review-rating") %>% 
+  html_text() %>% 
+  str_extract("^\\d") %>% 
+  as.numeric()
+
+review_text = html %>% 
+  html_nodes(".review-text-content span") %>% 
+  html_text() %>% 
+  str_replace_all("\n", "") %>% 
+  str_trim()
+
+reviews = tibble(
+  title = review_titles,
+  stars = review_stars,
+  text = review_text
+)
+
+reviews
+}
+```
+
+Let's try out my function
+
+```{r}
+napdyn_url = "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber=1"
+
+read_page_rev(napdyn_url)
+```
+
+Let's read a few pages of reviews
+
+With the function we can just change the url to every page and let it run the full fn
+
+```{r}
+napdyn_url_base = "https://www.amazon.com/Napoleon-Dynamite-Jon-Heder/product-reviews/B000I9U972/ref=cm_cr_getr_d_paging_btm_prev_1?ie=UTF8&reviewerType=all_reviews&pageNumber="
+
+#url base is the url up to the page number
+
+napdyn_urls = str_c(napdyn_url_base, 1:5)
+
+napdyn_urls[1] #gives first page
+napdyn_urls[3] #gives third page
+
+more_reviews = bind_rows(
+  read_page_rev(napdyn_urls[1]),
+  read_page_rev(napdyn_urls[2]),
+  read_page_rev(napdyn_urls[3]),
+  read_page_rev(napdyn_urls[4]),
+  read_page_rev(napdyn_urls[5])
+)
+#this part is still a little long lol. What if i wanted 30 pages?
+```
+
