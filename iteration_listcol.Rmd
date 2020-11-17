@@ -126,6 +126,66 @@ What if you want a diff fn?
 output = map(list_norm, median)
 ```
 
+```{r}
+output = map_dbl(list_norm, median, .id = "input")
+#map double gives me a vector 
+```
+
+```{r}
+output = map_df(list_norm, mean_sd, .id = "input")
+#can't make this a dbl bc the output are not individual number. 
+#CAN make it a data frame
+```
+
+## List columns!
+I want something to keep track of what output matches what input.
+
+
+```{r}
+listcol = 
+  tibble(
+    name = c("a", "b", "c", "d"),
+    samp = list_norm
+  )
+```
+
+```{r}
+listcol %>% pull(name)
+listcol %>% pull(samp)
+  
+
+listcol %>% 
+  filter(name == "a")
+```
+
+
+Let's try some operations
+
+```{r}
+listcol$samp #$ is the same as pulling
+
+mean_sd(listcol$samp[[1]])
+mean_sd(listcol$samp[[2]])
+```
+
+Can I jusp map??
+
+```{r}
+map(listcol$samp, mean_sd)
+#now this is a list col inside a data frame, which we are mapping across lists 
+```
+
+So can I add a list column?? Yes!!!! mutate prob!!!
+
+```{r}
+listcol = listcol %>% 
+  mutate(
+    summary = map(samp, mean_sd), #don't need $ bc we're in mutate and piped
+  medians = map_dbl(samp, median))
+```
+
+
+
 
 
 
