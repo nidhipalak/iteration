@@ -1,0 +1,112 @@
+---
+title: "Iteration and List Columns"
+author: "Nidhi Patel"
+date: "11/17/2020"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 6,
+  out.width = "90%")
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Lists
+
+You can put anything in a list
+
+```{r}
+l = list(
+  vec_num = 5:8,
+  vec_log = c(TRUE, TRUE, FALSE, TRUE, FALSE, FALSE),
+  mat = matrix(1:8, nrow = 2, ncol = 4),
+  summary = summary(rnorm(100))
+)
+#there is no way this would go into a dataframe (number of arguments do not match) but it can go into a list
+```
+
+How to access parts of list. 
+```{r}
+l$vec_num
+l[[1]]
+l[["vec_num"]]
+```
+
+
+## `for` loop
+
+Create a new list
+
+```{r}
+list_norm = 
+  list(
+    a = rnorm(20, mean = 3, sd = 1),
+    b = rnorm(30, mean = 0, sd = 5),
+    c = rnorm(40, mean = 7, sd = .6),
+    d = rnorm(50, mean = -3, sd = 1)
+  )
+```
+
+
+```{r}
+list_norm
+```
+
+Pause and get my old fn
+
+```{r}
+mean_sd = function(x) {
+ if (!is.numeric(x)) {
+   stop("Input must be numeric")
+ }
+  if (length(x) < 3) {
+    stop("Input must have at least three numbers")
+  }
+ mean_x = mean(x)
+ sd_x = sd(x)
+ 
+ tibble(
+   mean = mean_x,
+   sd = sd_x
+ )
+}
+```
+
+I can apply that fn to each list element
+
+```{r}
+mean_sd(list_norm[["a"]])
+mean_sd(list_norm[["b"]])
+mean_sd(list_norm[["c"]])
+mean_sd(list_norm[["d"]])
+```
+
+Let's use a for loop:
+
+```{r}
+output = vector("list", length = 4)
+#above is empty 
+
+for (i in 1:4){
+output[[i]] = mean_sd(list_norm[[i]])
+}
+#don't want to keep coyping over this line and change 1 to 2, 3, 4, etc. SO we use for loops
+#use i as a placeholder
+
+output
+```
+
