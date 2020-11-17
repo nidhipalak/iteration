@@ -1,0 +1,97 @@
+---
+title: "Writing Functions"
+author: "Nidhi Patel"
+date: "11/16/2020"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 6,
+  out.width = "90%")
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Do something simple
+
+```{r}
+x_vec = rnorm(30, mean = 5, sd = 3)
+
+(x_vec - mean(x_vec)) / sd(x_vec)
+#The above is the z-score
+```
+The summary numbers here show the z-scores. 
+
+I want a function to compute z score
+
+```{r}
+  #everything that happens between these{} brackets is the body of my function.
+#The input of the fn is x, we named it already
+z_score = function(x) {
+ 
+ z = (x - mean(x)) / sd(x)
+  
+  return(z)
+  
+}
+# we named the z-score z, the return is z
+z_score(x_vec)
+```
+
+Try my fn on some other things. These should giver errors
+
+```{r, error = TRUE}
+z_score(3)
+#can compute the mean of 3, but cannot compute the sd, need more numbers to compute sd
+z_score("my name is nidhi")
+#can't do this either; cant take mean of character
+z_score(mtcars)
+#can't take the z-score of a data set
+z_score(c(TRUE, TRUE, FALSE, TRUE))
+#this works bc it is logical and coerces it to 0's and 1's.
+#each of these is something that causes my fn to break. 
+
+```
+
+Update my fn
+
+```{r}
+z_score = function(x) {
+ if (!is.numeric(x)) {
+   stop("Input must be numeric")
+ }
+  if (length(x) < 3) {
+    stop("Input must have at least three numbers")
+  }
+ z = (x - mean(x)) / sd(x)
+  
+  return(z)
+}
+
+z_score(x_vec)
+```
+
+Try fn again, should also give errors
+
+```{r, error = TRUE}
+z_score(3)
+z_score("my name is nidhi")
+z_score(mtcars)
+z_score(c(TRUE, TRUE, FALSE, TRUE))
+#get input must be numeric!!!!!
+
+```
+
