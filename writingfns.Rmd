@@ -276,3 +276,35 @@ more_reviews = bind_rows(
 #this part is still a little long lol. What if i wanted 30 pages?
 ```
 
+## Mean scoping example
+
+```{r}
+f = function(x) {
+  z = x + y
+  z
+}
+
+x = 1
+y = 2
+#these x and y's are in the my global environment, not the fn
+f(x = y)
+# here it is saying x = y, so f(x = 2). Takes 2 and plugs into fn. Then the fn is saying it needs y, goes to global environment and finds it floating lol
+# if there was "x1" in the fn, the fn would break bc there isn't a x1 in the global environment
+```
+
+## Fns as arguments
+
+```{r}
+my_summary = function(x, summ_func) {
+  summ_func(x)
+  
+}
+
+x_vec = rnorm(100, 3, 7)
+
+mean(x_vec)
+median(x_vec)
+
+my_summary(x_vec, IQR)
+```
+
