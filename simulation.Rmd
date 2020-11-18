@@ -84,9 +84,78 @@ sim_results %>%
   summarize(
     avg_samp_mean = mean(mean),
     sd_samp_mean = sd(mean))
-  )
 
 sim_results %>% 
   ggplot(aes(x =  sd)) + geom_density()
 ```
 
+## Let's try other sample sizes
+
+revisit the for loop
+
+```{r}
+n_list = 
+  list(
+    "n = 30" = 30,
+    "n = 60" = 60,
+    "n = 120" = 120,
+    "n = 240" = 240
+  )
+
+#I want to say when n = 30, run it 100 times and save it; when n is 60 run it 100 times and save it, etc
+
+output = vector("list", length = 4)
+
+#output[[1]] = f(input[[1]]) # i want to write a fn that will adhere to this input
+
+ output[[1]] = rerun(100, sim_mean_sd(samp_size = n_list[[1]])) %>% 
+                       bind_rows() #can copy and past this or just create a for loop
+ for (i in 1:4) {
+ output[[i]] = rerun(100, sim_mean_sd(samp_size = n_list[[i]])) %>%
+   bind_rows()
+ }
+```
+
+```{r}
+sim_results = 
+tibble(
+  sample_size = c(30, 60, 120, 240)
+) %>% 
+  mutate(
+    output_lists = map(.x = sample_size, ~ rerun(1000, sim_mean_sd(.x))), #.x makes it really explicit.  The first argument to map is .x
+    estimate_df = map(output_lists, bind_rows)
+  ) %>% 
+  #pull(estimate_df) #we can see all the df in the estimate list!!
+
+#we don't need the output_lists, so tidy it up
+  select(-output_lists) %>% 
+#nest to do from a larger set to go to one object and a dataframe next to it (THE LIST!!) we unnest
+  unnest(estimate_df)
+
+```
+
+Do some dataframe things!!
+
+```{r}
+sim_results %>% 
+  mutate(
+    sample_size = str_c("n = ", sample_size),
+    sample_size = fct_inorder(sample_size)
+  ) %>% 
+  ggplot(aes(x = sample_size, y = mean)) +
+  geom_violin()
+```
+
+```{r}
+sim_results %>% 
+  group_by(sample_size) %>% 
+  summarise(
+    avg_samp_mean = mean(mean),
+    sd_samp_mean = sd(mean)
+  )
+```
+We see here that the avg sample mean is around what we're supposed to see and if we do sd = 4 / sqrt(sample_size). WHY 4??
+
+We reran them 1000 times, which takes forever, and will take forever when knitted. Use `cache = ` in the {r} code chunk bracket to avoid rerunning it and save the results ran. 
+
+`set.seed(1)` sets seed so we can choose a starting place if you want to run diff tests over the same numbers. It will give you the same rando numbers every time
