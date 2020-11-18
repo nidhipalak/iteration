@@ -1,0 +1,92 @@
+---
+title: "Simulations"
+author: "Nidhi Patel"
+date: "11/17/2020"
+output: github_document
+---
+```{r}
+library(tidyverse)
+library(rvest)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.height = 6,
+  out.width = "90%")
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Let's simulate something
+
+I have this function
+
+```{r}
+sim_mean_sd = function(samp_size, mu = 3, sigma = 4) {
+  # mu = mean, sigma = sd
+  sim_data = 
+  tibble(
+    x = rnorm(n = samp_size, mean = mu, sd = sigma)
+  )
+
+sim_data %>% 
+  summarize(
+    mean = mean(x),
+    sd = sd(x)
+  )
+}
+```
+
+I can "simulate" by running this line
+
+```{r}
+sim_mean_sd(30)
+```
+
+## Let's simulate a lot
+
+Let's start with a for loop
+```{r}
+output = vector("list", length = 100) # length says we're running this sim 100 times
+
+for (i in 1:100) { #for each iteration (1-100), i need to do the output
+  output[[i]] = sim_mean_sd(samp_size = 30)
+}
+
+bind_rows(output) #gives a tibble of mean and sd outputs
+```
+
+
+Let's use a loop fn
+
+```{r}
+sim_results = 
+  rerun(100, sim_mean_sd(samp_size = 30)) %>% 
+  bind_rows()
+#setting a seed. using set.seed tells r to use the same starting point when choosing a sample.
+
+```
+
+Let's look at results
+
+```{r}
+sim_results %>% 
+  ggplot(aes(x = mean)) + geom_density()
+
+sim_results %>% 
+  summarize(
+    avg_samp_mean = mean(mean),
+    sd_samp_mean = sd(mean))
+  )
+
+sim_results %>% 
+  ggplot(aes(x =  sd)) + geom_density()
+```
+
